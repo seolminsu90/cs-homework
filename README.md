@@ -6,6 +6,7 @@
 - Jdk
 - Node
 - Npm
+- Maven
 
 ### 구축
 ```bash
