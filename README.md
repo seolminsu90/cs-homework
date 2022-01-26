@@ -14,12 +14,12 @@
 git clone https://github.com/seolminsu90/cs-homework.git
 cd cs-homework-frontend
 npm install
-npm run dev
+npm run dev #port 8080
 
 # Backend dev server ON
 cd cs-homework-backend
 mvn clean package
-java -jar .\target\cs-question-api-0.0.1-SNAPSHOT.jar
+java -jar .\target\cs-question-api-0.0.1-SNAPSHOT.jar #port 8090
 ```
 
 ### 확인
