@@ -15,11 +15,11 @@ public class QuestionDTO {
 	private String customerId;
 
 	@NotNull
-	@Size(min = 1, max = 100)
+	@Size(min = 1, max = 50)
 	private String title;
 
 	@NotNull
-	@Size(min = 1, max = 500)
+	@Size(min = 1, max = 100)
 	private String content;
 
 	public Long getSeq() {

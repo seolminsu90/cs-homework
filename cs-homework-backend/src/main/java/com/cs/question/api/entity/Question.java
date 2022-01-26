@@ -13,12 +13,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import com.cs.question.api.model.QuestionDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Question")
+@DynamicInsert
 public class Question implements Serializable {
 
   private static final long serialVersionUID = 1L;

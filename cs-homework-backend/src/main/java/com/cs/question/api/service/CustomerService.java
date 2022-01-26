@@ -17,6 +17,7 @@ public class CustomerService {
   }
 
   public List<Question> findQuestion(String customerId) {
+    System.out.println("why -- " + customerId);
     return questionRepository.findByCustomerIdOrderBySeqDesc(customerId);
   }
 

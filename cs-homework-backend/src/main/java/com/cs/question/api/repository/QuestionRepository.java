@@ -11,6 +11,6 @@ public interface QuestionRepository extends CrudRepository<Question, Long> {
 
 	List<Question> findByCustomerIdOrderBySeqDesc(String customerId);
 
-	@Query(value = "SELECT A FROM Question A LEFT JOIN QuestionReceive B ON A.seq = B.questionSeq WHERE B.questionSeq IS NULL")
+	@Query(value = "SELECT A FROM Question A LEFT JOIN QuestionReceive B ON A.seq = B.questionSeq WHERE B.questionSeq IS NULL ORDER BY RegDate DESC")
 	List<Question> findByNoReadQuestions();
 }

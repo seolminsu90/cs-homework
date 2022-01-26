@@ -12,5 +12,5 @@ public interface QuestionReceiveRepository extends CrudRepository<QuestionReceiv
 	public Optional<QuestionReceive> findByQuestionSeqAndCounselorId(Long questionSeq, String counselorId);
 
 	@EntityGraph(attributePaths = "question")
-	public List<QuestionReceive> findByCounselorIdOrderByCheckStateDesc(String counselorId);
+	public List<QuestionReceive> findByCounselorIdOrderByCheckStateAsc(String counselorId);
 }

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(value = Include.NON_NULL)
 public class QuestionReceiveDTO {
 	@NotNull
-	@Size(min = 1, max = 500)
+	@Size(min = 1, max = 100)
 	private String content;
 	private Integer checkState;
 
