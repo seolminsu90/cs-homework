@@ -1,7 +1,7 @@
 ### 구성
 - Java Spring boot
 - Vuejs
-- H2 (memory0
+- H2 (memory)
 
 ### 준비물
 - Jdk11
