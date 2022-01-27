@@ -15,12 +15,12 @@
 git clone https://github.com/seolminsu90/cs-homework.git
 cd cs-homework-frontend
 npm install
-npm run dev #port 8080
+npm run dev # 포트는 8080 입니다.
 
 # Backend dev server ON
 cd cs-homework-backend
 mvn clean package
-java -jar .\target\cs-question-api-0.0.1-SNAPSHOT.jar #port 8090
+java -jar .\target\cs-question-api-0.0.1-SNAPSHOT.jar # 포트는 8090 입니다.
 ```
 
 - 1. 고객은 별도의 인증 인가 과정이 없기에 사전에 Id를 입력해서 저장해놓고 문의 작성 및 내 문의 조회를 하도록 유도
