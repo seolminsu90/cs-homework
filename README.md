@@ -4,7 +4,7 @@
 - H2 (memory0
 
 ### 준비물
-- Jdk
+- Jdk11
 - Node
 - Npm
 - Maven
