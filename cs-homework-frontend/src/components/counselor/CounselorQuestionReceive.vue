@@ -38,7 +38,7 @@
           <pre>{{questionReceive.questionContent}}</pre>
         </p>
         <p style="margin:20px 0"><span>A.</span>
-          <pre v-if="questionReceive.checkState === 1">{{questionReceive.responseContent}}</pre>
+          <pre v-if="questionReceive.checkState === 1">{{questionReceive.content}}</pre>
           <input maxlength="100" v-else-if="questionReceive.checkState === 0" v-model="content" type="text" placeholder="답변입력"/>
         </p>
 
