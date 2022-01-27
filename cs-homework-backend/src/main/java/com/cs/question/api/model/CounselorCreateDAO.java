@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(value = Include.NON_NULL)
-public class CounselorCreateDTO {
+public class CounselorCreateDAO {
   @NotNull
   @Size(min = 4, max = 20)
   private String id;

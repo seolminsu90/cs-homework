@@ -10,8 +10,12 @@
               <span class="title">{{q.title}}</span>
             </p>
             <p class="stateAndDate">
-              <span class="state init">접수완료</span>
-              <span class="date">{{q.createDate}}</span>
+              <span v-if="q.checkState === null || q.checkState === undefined" class="state init">접수완료</span>
+              <span v-else-if="q.checkState === 0" class="state regist">담당자지정완료</span>
+              <span v-else-if="q.checkState === 1" class="state finish">답변완료</span>
+              <span v-if="q.checkState === null || q.state === undefined" class="date">{{q.regDate}}</span>
+              <span v-else-if="q.checkState === 0" class="date">{{q.createDate}}</span>
+              <span v-else-if="q.checkState === 1" class="date">{{q.responseDate}}</span>
             </p>
           </div>
         </li>
@@ -24,19 +28,22 @@
           <span class="title">{{question.title}}</span>
         </p>
         <p class="stateAndDate">
-          <span class="state init">접수완료</span>
-          <!--<span class="state regist">담당자지정</span>
-          <span class="state finish">답변완료</span>-->
-          <span class="date">{{question.createDate}}</span>
+          <span v-if="question.checkState === null || question.checkState === undefined" class="state init">접수완료</span>
+          <span v-else-if="question.checkState === 0" class="state regist">담당자지정완료</span>
+          <span v-else-if="question.checkState === 1" class="state finish">답변완료</span>
+          <span v-if="question.checkState === null || question.state === undefined" class="date">{{question.regDate}}</span>
+          <span v-else-if="question.checkState === 0" class="date">{{question.createDate}}</span>
+          <span v-else-if="question.checkState === 1" class="date">{{question.responseDate}}</span>
         </p>
       </div>
       <div class="contentPart">
         <p><span>Q.</span>
         <pre>{{question.content}}</pre>
         </p>
-        <!--<p><span></span>
-        <pre>{{question.content}}</pre>
-        </p>-->
+        <p v-if="question.checkState === 1" style="margin:20px 0">
+          <span>A.</span><span style="font-size:15px">상담원 : {{question.counselorName}}</span>
+          <pre v-if="question.checkState === 1">{{question.responseContent}}</pre>
+        </p>
         <button type="button" @click="hideDetail">뒤로가기</button>
       </div>
     </article>
@@ -44,14 +51,10 @@
 </template>
 
 <script>
-import CustomerQuestionDetail from '@/components/customer/CustomerQuestionDetail'
 
 export default {
   name: 'CustomerQuestionList',
   props: ['cid'],
-  components: {
-    'customerQuestionDetail': CustomerQuestionDetail,
-  },
   mounted(){
     this.getQuestions()
   },
@@ -92,18 +95,32 @@ export default {
   data(){
     return {
       question: {
-        'content': '',
-        'customerId': '',
-        'regDate': null,
-        'seq': null,
-        'title': '',
+        questionSeq: null,
+        counselorId: '',
+        content: '',
+        responseContent: '',
+        customerId: '',
+        regDate: null,
+        seq: null,
+        title: '',
+        counselorName: '',
+        createDate: null,
+        responseDate: null,
+        checkState: null,
       },
       questionInit: {
-        'content': '',
-        'customerId': '',
-        'regDate': null,
-        'seq': null,
-        'title': '',
+        questionSeq: null,
+        counselorId: '',
+        content: '',
+        responseContent: '',
+        customerId: '',
+        regDate: null,
+        seq: null,
+        title: '',
+        counselorName: '',
+        createDate: null,
+        responseDate: null,
+        checkState: null,
       },
       questions: [],
       mode: 'list',

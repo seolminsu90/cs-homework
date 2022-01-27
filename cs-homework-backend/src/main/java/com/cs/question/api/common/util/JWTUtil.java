@@ -14,79 +14,74 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.cs.question.api.entity.Counselor;
+import com.cs.question.api.entity.dto.CounselorDTO;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 
 @Primary
 @Component("jwtUtil")
 public class JWTUtil {
-	private final String JWT_SIGN_KEY = "mysignkey";
-
-	public String createToken(Counselor user) {
-		Map<String, Object> claims = new HashMap<String, Object>();
-
-		List<String> authList = new ArrayList<String>();
-
-		user.getAuthorities().forEach(auth -> authList.add(auth.getAuthority()));
-
-		claims.put("id", user.getId());
-		claims.put("name", user.getName());
-		claims.put("authList", authList);
-
-		Date dt = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(dt);
-		c.add(Calendar.MINUTE, 3600);
-		dt = c.getTime();
-
-		String accessToken = Jwts.builder().setClaims(claims).setExpiration(dt)
-				.signWith(SignatureAlgorithm.HS512, JWT_SIGN_KEY).compact();
-
-		return accessToken;
-	}
-
-	@SuppressWarnings("unchecked")
-	public Counselor checkToken(String token) {
-		Jws<Claims> jwt = signAndParseJWT(token);
-		if (jwt == null)
-			return null;
-		Claims token_body = jwt.getBody();
-
-		List<String> auth_list = (List<String>) token_body.get("authList");
-		String id = (String) token_body.get("id");
-		String name = (String) token_body.get("name");
-
-		Counselor user = new Counselor();
-		user.setAuthorities(setAuthorities(auth_list));
-		user.setId(id);
-		user.setName(name);
-
-		return user;
-	}
-
-	public Jws<Claims> signAndParseJWT(String token) {
-		try {
-			return Jwts.parser().setSigningKey(JWT_SIGN_KEY).parseClaimsJws(token);
-		} catch (Exception e) {
-			// ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException
-			return null;
-		}
-	}
-
-	public Collection<GrantedAuthority> setAuthorities(List<String> auth_list) {
-		List<GrantedAuthority> authorities = new ArrayList<>();
-
-		auth_list.stream().forEach(authority -> {
-			authorities.add(new SimpleGrantedAuthority(authority));
-		});
-
-		return authorities;
-	}
+  private final String JWT_SIGN_KEY = "mysignkey";
+  
+  public void createAndSetToken(CounselorDTO user) {
+    Map<String, Object> claims = new HashMap<String, Object>();
+    
+    List<String> authList = new ArrayList<String>();
+    
+    user.getAuthorities().forEach(auth -> authList.add(auth.getAuthority()));
+    
+    claims.put("id", user.getId());
+    claims.put("name", user.getName());
+    claims.put("authList", authList);
+    
+    Date dt = new Date();
+    Calendar c = Calendar.getInstance();
+    c.setTime(dt);
+    c.add(Calendar.MINUTE, 3600);
+    dt = c.getTime();
+    
+    String accessToken = Jwts.builder().setClaims(claims).setExpiration(dt).signWith(SignatureAlgorithm.HS512, JWT_SIGN_KEY).compact();
+    
+    user.setToken(accessToken);
+  }
+  
+  @SuppressWarnings("unchecked")
+  public Counselor checkToken(String token) {
+    Jws<Claims> jwt = signAndParseJWT(token);
+    if (jwt == null) return null;
+    Claims token_body = jwt.getBody();
+    
+    List<String> auth_list = (List<String>) token_body.get("authList");
+    String id = (String) token_body.get("id");
+    String name = (String) token_body.get("name");
+    
+    Counselor user = new Counselor();
+    user.setAuthorities(setAuthorities(auth_list));
+    user.setId(id);
+    user.setName(name);
+    
+    return user;
+  }
+  
+  public Jws<Claims> signAndParseJWT(String token) {
+    try {
+      return Jwts.parser().setSigningKey(JWT_SIGN_KEY).parseClaimsJws(token);
+    } catch (Exception e) {
+      // ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException
+      return null;
+    }
+  }
+  
+  public Collection<GrantedAuthority> setAuthorities(List<String> auth_list) {
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    
+    auth_list.stream().forEach(authority -> {
+      authorities.add(new SimpleGrantedAuthority(authority));
+    });
+    
+    return authorities;
+  }
 }

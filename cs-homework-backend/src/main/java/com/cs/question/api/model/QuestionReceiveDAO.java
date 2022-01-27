@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(value = Include.NON_NULL)
-public class QuestionReceiveDTO {
+public class QuestionReceiveDAO {
 	@NotNull
 	@Size(min = 1, max = 100)
 	private String content;

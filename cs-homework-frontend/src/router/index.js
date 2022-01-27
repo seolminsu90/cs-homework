@@ -2,11 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
 
-import Customer from '@/components/customer/Customer'
-import CustomerMain from '@/components/customer/CustomerMain'
+import Customer from '@/components/Customer'
+import CustomerMain from '@/components/CustomerMain'
 
-import Counselor from '@/components/counselor/Counselor'
-import CounselorMain from '@/components/counselor/CounselorMain'
+import Counselor from '@/components/Counselor'
+import CounselorMain from '@/components/CounselorMain'
 
 Vue.use(Router)
 

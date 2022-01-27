@@ -22,12 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cs.question.api.common.model.ApiResponse;
 import com.cs.question.api.common.util.JWTUtil;
-import com.cs.question.api.entity.Counselor;
-import com.cs.question.api.entity.Question;
 import com.cs.question.api.entity.QuestionReceive;
-import com.cs.question.api.model.CounselorCreateDTO;
-import com.cs.question.api.model.CounselorDTO;
-import com.cs.question.api.model.QuestionReceiveDTO;
+import com.cs.question.api.entity.dto.CounselorDTO;
+import com.cs.question.api.entity.dto.QuestionDTO;
+import com.cs.question.api.entity.dto.QuestionReceiveDTO;
+import com.cs.question.api.model.CounselorCreateDAO;
+import com.cs.question.api.model.CounselorDAO;
+import com.cs.question.api.model.QuestionReceiveDAO;
 import com.cs.question.api.service.CounselorService;
 
 @RestController
@@ -46,58 +47,54 @@ public class CounselorController {
   }
   
   @PostMapping
-  public ResponseEntity<ApiResponse<Void>> counselorCreate(@Valid @RequestBody CounselorCreateDTO dto) {
-    dto.setPwd(this.passwordEncoder.encode(dto.getPwd()));
-    counselorService.createUser(dto);
+  public ResponseEntity<ApiResponse<CounselorDTO>> counselorCreate(@Valid @RequestBody CounselorCreateDAO dao) {
+    dao.setPwd(this.passwordEncoder.encode(dao.getPwd()));
+    CounselorDTO user = counselorService.createUser(dao);
     
-    return new ResponseEntity<>(new ApiResponse<>(0), HttpStatus.OK);
+    return new ResponseEntity<>(new ApiResponse<>(0, user), HttpStatus.CREATED);
   }
   
   @PostMapping("/login")
-  public ResponseEntity<ApiResponse<Counselor>> counselorLogin(@Valid @RequestBody CounselorDTO dto) {
-    Counselor user = counselorService.readUser(dto.getId());
+  public ResponseEntity<ApiResponse<CounselorDTO>> counselorLogin(@Valid @RequestBody CounselorDAO dao) {
+    CounselorDTO user = counselorService.readUser(dao, passwordEncoder);
     
     if (user == null) {
       throw new BadCredentialsException("user not found");
     }
     
-    if (!this.passwordEncoder.matches(dto.getPwd(), user.getPassword())) {
-      throw new BadCredentialsException("password is not matched");
-    }
-    
-    user.setToken(jwtUtil.createToken(user));
+    jwtUtil.createAndSetToken(user);
     
     return new ResponseEntity<>(new ApiResponse<>(0, user), HttpStatus.OK);
   }
   
   @Secured("ROLE_COUNSELOR")
   @GetMapping("/questions")
-  public ResponseEntity<ApiResponse<List<Question>>> getQuestion() {
-    List<Question> list = counselorService.getQuestion();
+  public ResponseEntity<ApiResponse<List<QuestionDTO>>> getQuestion() {
+    List<QuestionDTO> list = counselorService.getQuestion();
     
     return new ResponseEntity<>(new ApiResponse<>(0, list), HttpStatus.OK);
   }
   
   @Secured("ROLE_COUNSELOR")
   @GetMapping("/questions-own")
-  public ResponseEntity<ApiResponse<List<QuestionReceive>>> getQuestionReceive(@AuthenticationPrincipal UserDetails counselor) {
-    List<QuestionReceive> list = counselorService.getQuestionReceive(counselor.getUsername());
+  public ResponseEntity<ApiResponse<List<QuestionReceiveDTO>>> getQuestionReceive(@AuthenticationPrincipal UserDetails counselor) {
+    List<QuestionReceiveDTO> list = counselorService.getQuestionReceive(counselor.getUsername());
     
     return new ResponseEntity<>(new ApiResponse<>(0, list), HttpStatus.OK);
   }
   
   @Secured("ROLE_COUNSELOR")
   @PostMapping("/questions/{questionId}/receive")
-  public ResponseEntity<ApiResponse<QuestionReceive>> receiveQuestion(@AuthenticationPrincipal UserDetails counselor, @PathVariable Long questionId) {
-    QuestionReceive result = counselorService.receiveQuestion(counselor.getUsername(), questionId);
+  public ResponseEntity<ApiResponse<QuestionReceiveDTO>> receiveQuestion(@AuthenticationPrincipal UserDetails counselor, @PathVariable Long questionId) {
+    QuestionReceiveDTO result = counselorService.receiveQuestion(counselor.getUsername(), questionId);
     
     return new ResponseEntity<>(new ApiResponse<>(0, result), HttpStatus.CREATED);
   }
   
   @Secured("ROLE_COUNSELOR")
   @PutMapping("/questions/{questionId}/response")
-  public ResponseEntity<ApiResponse<QuestionReceive>> writeResponse(@AuthenticationPrincipal UserDetails counselor, @Valid @RequestBody QuestionReceiveDTO questionReceiveDTO, @PathVariable Long questionId) {
-    QuestionReceive result = counselorService.writeResponse(questionReceiveDTO, counselor.getUsername(), questionId);
+  public ResponseEntity<ApiResponse<QuestionReceiveDTO>> writeResponse(@AuthenticationPrincipal UserDetails counselor, @Valid @RequestBody QuestionReceiveDAO questionReceiveDao, @PathVariable Long questionId) {
+    QuestionReceiveDTO result = counselorService.writeResponse(questionReceiveDao, counselor.getUsername(), questionId);
     
     return new ResponseEntity<>(new ApiResponse<>(0, result), HttpStatus.CREATED);
   }

@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.cs.question.api.model.CounselorCreateDTO;
+import com.cs.question.api.model.CounselorCreateDAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -44,10 +44,10 @@ public class Counselor implements Serializable, UserDetails {
     
   }
   
-  public Counselor(CounselorCreateDTO dto) {
-    this.id = dto.getId();
-    this.name = dto.getName();
-    this.pwd = dto.getPwd();
+  public Counselor(CounselorCreateDAO dao) {
+    this.id = dao.getId();
+    this.name = dao.getName();
+    this.pwd = dao.getPwd();
   }
   
   public Counselor(String id, String name, String pwd) {

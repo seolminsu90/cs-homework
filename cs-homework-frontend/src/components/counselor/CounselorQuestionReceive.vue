@@ -7,12 +7,12 @@
           <div class="titlePart">
             <p>
               <span class="title titleNo">문의번호[ {{q.questionSeq}} ]</span>
-              <span class="title">{{q.question.title}}</span>
+              <span class="title">{{q.title}}</span>
             </p>
             <p class="stateAndDate">
-              <span v-if="q.content == null" class="state regist">담당자지정</span>
-              <span v-else-if="q.content != null" class="state finish">답변완료</span>
-              <span class="date">{{q.question.regDate}}(문의일시)</span>
+              <span v-if="q.checkState === 0" class="state regist">담당자지정</span>
+              <span v-else-if="q.checkState === 1" class="state finish">답변완료</span>
+              <span class="date">{{q.regDate}}(문의일시)</span>
             </p>
           </div>
         </li>
@@ -22,27 +22,27 @@
       <div class="titlePart">
         <p>
           <span class="title titleNo">문의번호[ {{questionReceive.questionSeq}} ]</span>
-          <span class="title">{{questionReceive.question.title}}</span>
+          <span class="title">{{questionReceive.title}}</span>
         </p>
-        <p class="stateAndDate" v-if="questionReceive.content == null">
+        <p class="stateAndDate" v-if="questionReceive.checkState === 0">
           <span class="state regist">담당자지정</span>
           <span class="date">{{questionReceive.createDate}}(할당일)</span>
         </p>
-        <p class="stateAndDate" v-else-if="questionReceive.content != null">
+        <p class="stateAndDate" v-else-if="questionReceive.checkState === 1">
           <span class="state finish">답변완료</span>
           <span class="date">{{questionReceive.responseDate}}(답변일)</span>
         </p>
       </div>
       <div class="contentPart">
         <p><span>Q.</span>
-          <pre>{{questionReceive.question.content}}</pre>
+          <pre>{{questionReceive.questionContent}}</pre>
         </p>
         <p style="margin:20px 0"><span>A.</span>
-          <pre v-if="questionReceive.content != null">{{questionReceive.content}}</pre>
-          <input maxlength="100" v-else-if="questionReceive.content == null" v-model="content" type="text" placeholder="답변입력"/>
+          <pre v-if="questionReceive.checkState === 1">{{questionReceive.responseContent}}</pre>
+          <input maxlength="100" v-else-if="questionReceive.checkState === 0" v-model="content" type="text" placeholder="답변입력"/>
         </p>
 
-        <button v-if="questionReceive.content == null" type="button" @click="answer(questionReceive.questionSeq)" style="margin-bottom:10px">답변등록</button>
+        <button v-if="questionReceive.checkState === 0" type="button" @click="answer(questionReceive.seq)" style="margin-bottom:10px">답변등록</button>
         <button type="button" @click="hideDetail">뒤로가기</button>
       </div>
     </article>
@@ -127,13 +127,12 @@ export default {
         questionSeq: null,
         counselorId: '',
         content: '',
-        question: {
-          content: '',
-          customerId: '',
-          regDate: null,
-          seq: null,
-          title: '',
-        },
+        responseContent: '',
+        customerId: '',
+        regDate: null,
+        seq: null,
+        title: '',
+        counselorName: '',
         createDate: null,
         responseDate: null,
       },
@@ -141,13 +140,12 @@ export default {
         questionSeq: null,
         counselorId: '',
         content: '',
-        question: {
-          content: '',
-          customerId: '',
-          regDate: null,
-          seq: null,
-          title: '',
-        },
+        responseContent: '',
+        customerId: '',
+        regDate: null,
+        seq: null,
+        title: '',
+        counselorName: '',
         createDate: null,
         responseDate: null,
       },

@@ -2,7 +2,7 @@
   <div class="article_wrap">
     <article v-if="mode == 'list'">
       <ul>
-        <li v-if="questions.length == 0">문의 내역이 없습니다.(10초마다 갱신됩니다.)</li>
+        <li v-if="questions.length == 0">문의 내역이 없습니다.(10초후 갱신됩니다.)</li>
         <li v-for="(q,idx) in questions" @click="showDetail(q)" v-bind:key="idx">
           <div class="titlePart">
             <p>
