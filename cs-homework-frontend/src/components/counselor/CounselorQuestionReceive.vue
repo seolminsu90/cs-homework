@@ -42,7 +42,7 @@
           <input maxlength="100" v-else-if="questionReceive.checkState === 0" v-model="content" type="text" placeholder="답변입력"/>
         </p>
 
-        <button v-if="questionReceive.checkState === 0" type="button" @click="answer(questionReceive.seq)" style="margin-bottom:10px">답변등록</button>
+        <button v-if="questionReceive.checkState === 0" type="button" @click="answer(questionReceive.questionSeq)" style="margin-bottom:10px">답변등록</button>
         <button type="button" @click="hideDetail">뒤로가기</button>
       </div>
     </article>
@@ -53,7 +53,6 @@
 
 export default {
   name: 'CounselorQuestionReceive',
-  props: ['cid'],
   mounted(){
     this.getQuestions()
   },
